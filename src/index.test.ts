@@ -7,7 +7,7 @@ import Imap from "imap"
 vi.mock("@modelcontextprotocol/sdk/server/mcp.js")
 vi.mock("@modelcontextprotocol/sdk/server/stdio.js")
 vi.mock("imap")
-vi.mock("./tools/create-draft", () => ({
+vi.mock("./tools/create-draft.js", () => ({
   registerCreateDraft: vi.fn(),
 }))
 
@@ -33,11 +33,13 @@ describe("main", () => {
     const mockTransport = {}
     const mockImap = {}
 
-    vi.mocked(McpServer).mockImplementation(() => mockServer as McpServer)
-    vi.mocked(StdioServerTransport).mockImplementation(
-      () => mockTransport as StdioServerTransport,
+    vi.mocked(McpServer).mockImplementation(
+      () => mockServer as unknown as McpServer,
     )
-    vi.mocked(Imap).mockImplementation(() => mockImap as Imap)
+    vi.mocked(StdioServerTransport).mockImplementation(
+      () => mockTransport as unknown as StdioServerTransport,
+    )
+    vi.mocked(Imap).mockImplementation(() => mockImap as unknown as Imap)
 
     // Import and run main function
     const { main } = await import("./index.js")
