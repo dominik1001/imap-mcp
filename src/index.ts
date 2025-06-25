@@ -5,14 +5,14 @@ import Imap from "imap"
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 
-import { registerCreateDraft } from "./tools"
+import { registerCreateDraft } from "./tools/create-draft"
 
 const server = new McpServer({
   name: "imap-mcp",
   version: "0.1.0",
 })
 
-async function main() {
+export async function main() {
   const imapConfig = {
     user: process.env.IMAP_USERNAME || "",
     password: process.env.IMAP_PASSWORD || "",
@@ -31,4 +31,7 @@ async function main() {
   await server.connect(transport)
 }
 
-main()
+// Only run main if this file is executed directly (not imported)
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main()
+}
