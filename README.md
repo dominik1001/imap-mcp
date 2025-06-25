@@ -1,4 +1,4 @@
-# caldav-mcp
+# imap-mcp
 
 <div align="center">
 
