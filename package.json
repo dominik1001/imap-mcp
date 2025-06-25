@@ -1,7 +1,7 @@
 {
   "name": "imap-mcp",
   "description": "📧 An IMAP Model Context Protocol (MCP) server to expose IMAP operations as tools for AI assistants.",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "main": "dist/index.js",
   "type": "module",
   "bin": {
