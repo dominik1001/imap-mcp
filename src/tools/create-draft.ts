@@ -1,38 +1,69 @@
-import { CalDAVClient, RecurrenceRule } from "ts-caldav"
+import Imap from "imap"
 import { z } from "zod"
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 
-const recurrenceRuleSchema = z.object({
-  freq: z.enum(["DAILY", "WEEKLY", "MONTHLY", "YEARLY"]).optional(),
-  interval: z.number().optional(),
-  count: z.number().optional(),
-  until: z.string().datetime().optional(), // ISO 8601 string
-  byday: z.array(z.string()).optional(), // e.g. ["MO", "TU"]
-  bymonthday: z.array(z.number()).optional(),
-  bymonth: z.array(z.number()).optional(),
-})
-
-export function registerCreateDraft(client: CalDAVClient, server: McpServer) {
+export function registerCreateDraft(client: Imap, server: McpServer) {
   server.tool(
-    "create-event",
-    "Creates an event in the calendar specified by its URL",
+    "create-draft",
+    "Creates a draft email message",
     {
-      summary: z.string(),
-      start: z.string().datetime(),
-      end: z.string().datetime(),
-      calendarUrl: z.string(),
-      recurrenceRule: recurrenceRuleSchema.optional(),
+      to: z.string(),
+      subject: z.string(),
+      body: z.string(),
+      from: z.string().optional(),
     },
-    async ({ calendarUrl, summary, start, end, recurrenceRule }) => {
-      const event = await client.createEvent(calendarUrl, {
-        summary: summary,
-        start: new Date(start),
-        end: new Date(end),
-        recurrenceRule: recurrenceRule as RecurrenceRule,
+    async ({ to, subject, body, from }) => {
+      return new Promise((resolve, reject) => {
+        client.once("ready", () => {
+          client.openBox("INBOX.Drafts", false, (err) => {
+            if (err) {
+              // Try opening "Drafts" folder instead
+              client.openBox("Drafts", false, (err2) => {
+                if (err2) {
+                  reject(
+                    new Error(`Failed to open drafts folder: ${err2.message}`),
+                  )
+                  return
+                }
+                createDraftMessage()
+              })
+              return
+            }
+            createDraftMessage()
+          })
+
+          function createDraftMessage() {
+            const message = [
+              `From: ${from || process.env.IMAP_USERNAME || ""}`,
+              `To: ${to}`,
+              `Subject: ${subject}`,
+              "",
+              body,
+            ].join("\r\n")
+
+            client.append(message, { flags: ["\\Draft"] }, (err) => {
+              if (err) {
+                reject(new Error(`Failed to create draft: ${err.message}`))
+                return
+              }
+              resolve({
+                content: [
+                  {
+                    type: "text",
+                    text: `Draft created successfully for ${to}`,
+                  },
+                ],
+              })
+            })
+          }
+        })
+
+        client.once("error", (err: Error) => {
+          reject(new Error(`IMAP connection error: ${err.message}`))
+        })
+
+        client.connect()
       })
-      return {
-        content: [{ type: "text", text: event.uid }],
-      }
     },
   )
 }

@@ -35,9 +35,11 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.13.1",
     "dotenv": "^16.5.0",
-    "ts-caldav": "^0.2.0"
+    "imap": "^0.8.19",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@types/imap": "^0.8.40",
     "@eslint/js": "^9.29.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",

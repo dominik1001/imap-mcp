@@ -1,5 +1,5 @@
 import { describe, test } from "vitest"
 
-describe("registerCreateEvent", () => {
+describe("registerCreateDraft", () => {
   test("to be implemented", () => {})
 })

@@ -1,26 +1,28 @@
 #!/usr/bin/env node
 
 import "dotenv/config"
-import { CalDAVClient } from "ts-caldav"
+import Imap from "imap"
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 
 import { registerCreateDraft } from "./tools"
 
 const server = new McpServer({
-  name: "caldav-mcp",
+  name: "imap-mcp",
   version: "0.1.0",
 })
 
 async function main() {
-  const client = await CalDAVClient.create({
-    baseUrl: process.env.CALDAV_BASE_URL || "",
-    auth: {
-      type: "basic",
-      username: process.env.CALDAV_USERNAME || "",
-      password: process.env.CALDAV_PASSWORD || "",
-    },
-  })
+  const imapConfig = {
+    user: process.env.IMAP_USERNAME || "",
+    password: process.env.IMAP_PASSWORD || "",
+    host: process.env.IMAP_HOST || "",
+    port: parseInt(process.env.IMAP_PORT || "993"),
+    tls: process.env.IMAP_USE_SSL === "true",
+    tlsOptions: { rejectUnauthorized: false },
+  }
+
+  const client = new Imap(imapConfig)
 
   registerCreateDraft(client, server)
 
