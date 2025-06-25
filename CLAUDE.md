@@ -4,20 +4,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This project is a CalDAV client using the Model Context Protocol (MCP) server to expose calendar operations as tools. It uses:
+This project is an IMAP Model Context Protocol (MCP) server to expose IMAP operations as tools for AI assistants. It uses:
 
-- ts-caldav: A TypeScript CalDAV client for interacting with calendar servers
 - MCP SDK: Model Context Protocol for creating tools that can be used by AI assistants
-- dotenv: For environment variable management
+- IMAP client libraries for interacting with email servers
 
 ## Environment Setup
 
-The project requires the following environment variables to be set in a `.env` file:
+The project requires the following environment variables:
 
 ```
-CALDAV_BASE_URL=<CalDAV server URL>
-CALDAV_USERNAME=<CalDAV username>
-CALDAV_PASSWORD=<CalDAV password>
+IMAP_HOST=<IMAP host>
+IMAP_PORT=<IMAP port>
+IMAP_USERNAME=<IMAP username>
+IMAP_PASSWORD=<IMAP password>
+IMAP_USE_SSL=<IMAP ssl option>
 ```
 
 ## Common Commands
@@ -35,12 +36,10 @@ node index.js
 
 ## Project Architecture
 
-The codebase is a simple MCP server implementation that:
+The codebase is an MCP server implementation that:
 
-1. Connects to a CalDAV server using credentials from environment variables
-2. Retrieves the user's calendars and uses the first one for operations
-3. Exposes two MCP tools:
-   - `create-event`: Creates a calendar event with summary, start, and end time
-   - `list-events`: Lists events between a start and end time
+1. Connects to an IMAP server using credentials from environment variables
+2. Exposes IMAP operations as MCP tools for AI assistants
+3. Available tools: TBD (to be determined)
 
 The MCP server uses the StdioServerTransport to communicate through stdin/stdout, making it suitable for integration with Claude or other AI assistants that support the Model Context Protocol.
