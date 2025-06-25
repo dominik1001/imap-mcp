@@ -33,7 +33,7 @@
   "author": "Dominik Grusemann",
   "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.13.0",
+    "@modelcontextprotocol/sdk": "^1.13.1",
     "dotenv": "^16.5.0",
     "ts-caldav": "^0.2.0"
   },
@@ -42,17 +42,17 @@
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^11.0.3",
-    "@types/node": "^24.0.3",
+    "@types/node": "^24.0.4",
     "eslint": "^9.29.0",
     "eslint-config-prettier": "^10.1.5",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
-    "prettier": "3.5.3",
+    "prettier": "3.6.1",
     "semantic-release": "^24.2.5",
     "shx": "^0.4.0",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.34.1",
-    "vitest": "^3.0.0"
+    "typescript-eslint": "^8.35.0",
+    "vitest": "^3.2.4"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,js,jsx}": [

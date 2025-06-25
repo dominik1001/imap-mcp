@@ -12,7 +12,7 @@ const recurrenceRuleSchema = z.object({
   bymonth: z.array(z.number()).optional(),
 })
 
-export function registerCreateEvent(client: CalDAVClient, server: McpServer) {
+export function registerCreateDraft(client: CalDAVClient, server: McpServer) {
   server.tool(
     "create-event",
     "Creates an event in the calendar specified by its URL",

@@ -5,12 +5,7 @@ import { CalDAVClient } from "ts-caldav"
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 
-import {
-  registerCreateEvent,
-  registerListEvents,
-  registerDeleteEvent,
-  registerListCalendars,
-} from "./tools"
+import { registerCreateDraft } from "./tools"
 
 const server = new McpServer({
   name: "caldav-mcp",
@@ -27,10 +22,7 @@ async function main() {
     },
   })
 
-  registerCreateEvent(client, server)
-  registerListEvents(client, server)
-  registerDeleteEvent(client, server)
-  await registerListCalendars(client, server)
+  registerCreateDraft(client, server)
 
   // Start receiving messages on stdin and sending messages on stdout
   const transport = new StdioServerTransport()
