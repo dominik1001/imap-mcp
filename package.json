@@ -1,0 +1,63 @@
+{
+  "name": "caldav-mcp",
+  "description": "A CalDAV client using Model Context Protocol (MCP) to expose calendar operations as tools for AI assistants.",
+  "version": "0.2.0",
+  "main": "dist/index.js",
+  "type": "module",
+  "bin": {
+    "caldav-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc && shx chmod +x dist/*.js",
+    "prepare": "npm run build && husky",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "watch": "tsc --watch",
+    "semantic-release": "semantic-release",
+    "format": "prettier --write src/.",
+    "format:check": "prettier --check src/."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dominik1001/caldav-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dominik1001/caldav-mcp/issues"
+  },
+  "homepage": "https://github.com/dominik1001/caldav-mcp#readme",
+  "author": "Dominik Grusemann",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.13.0",
+    "dotenv": "^16.5.0",
+    "ts-caldav": "^0.2.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.29.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.3",
+    "@types/node": "^24.0.3",
+    "eslint": "^9.29.0",
+    "eslint-config-prettier": "^10.1.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
+    "prettier": "3.5.3",
+    "semantic-release": "^24.2.5",
+    "shx": "^0.4.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.34.1",
+    "vitest": "^3.0.0"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}
