@@ -13,7 +13,11 @@
 
 ## ✨ Features
 
-- tbd
+- **Email Draft Creation**: Create draft emails that are saved to your IMAP server's drafts folder
+- **IMAP Integration**: Connect to any IMAP-compatible email server (Gmail, Outlook, etc.)
+- **Secure Authentication**: Uses environment variables for secure credential management
+- **MCP Compatible**: Works with Claude and other AI assistants that support the Model Context Protocol
+- **TypeScript**: Full TypeScript support with proper type definitions
 
 ## Setup
 
@@ -29,9 +33,9 @@
       "env": {
         "IMAP_HOST": "<IMAP host>",
         "IMAP_PORT": "<IMAP port>",
-        "IMAP_USERNAME": "<IMAP username>"
-        "IMAP_PASSWORD": "<IMAP password>"
-        "IMAP_USE_SSL": "<IMAP ssl option>"
+        "IMAP_USERNAME": "<IMAP username>",
+        "IMAP_PASSWORD": "<IMAP password>",
+        "IMAP_USE_SSL": "<true or false>"
       }
     }
   }
@@ -47,12 +51,32 @@ npx tsc
 
 2. Run the MCP server:
 ```bash
-node index.js
+node dist/index.js
 ```
 
 ## Available Tools
 
-### tbd
+### `create-draft`
+
+Creates a draft email message and saves it to the IMAP server's drafts folder.
+
+**Parameters:**
+- `to` (string, required): The recipient's email address
+- `subject` (string, required): The email subject line
+- `body` (string, required): The email body content
+- `from` (string, optional): The sender's email address (defaults to IMAP_USERNAME)
+
+**Example:**
+```json
+{
+  "to": "recipient@example.com",
+  "subject": "Meeting Reminder",
+  "body": "Don't forget about our meeting tomorrow at 2 PM.",
+  "from": "sender@example.com"
+}
+```
+
+The tool will attempt to save the draft to either "INBOX.Drafts" or "Drafts" folder, depending on your email server's folder structure.
 
 ## License
 
