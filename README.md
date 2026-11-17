@@ -9,6 +9,8 @@
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-purple.svg)](https://modelcontextprotocol.io)
 [![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
 
+Maintained by the team behind Langmail. Want mail, calendar and contacts for your agent over one hosted MCP, with OAuth and nothing to run? → [langmail.me](https://langmail.me/?ref=imap-mcp)
+
 </div>
 
 ## ✨ Features
