@@ -1,5 +1,6 @@
 {
   "name": "imap-mcp",
+  "mcpName": "io.github.langmail/imap-mcp",
   "description": "📧 An IMAP Model Context Protocol (MCP) server to expose IMAP operations as tools for AI assistants.",
   "version": "1.0.0",
   "main": "dist/index.js",
@@ -24,12 +25,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/dominik1001/imap-mcp.git"
+    "url": "https://github.com/langmail/imap-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/dominik1001/imap-mcp/issues"
+    "url": "https://github.com/langmail/imap-mcp/issues"
   },
-  "homepage": "https://github.com/dominik1001/imap-mcp#readme",
+  "homepage": "https://github.com/langmail/imap-mcp#readme",
   "author": "Dominik Grusemann",
   "license": "MIT",
   "dependencies": {
@@ -39,18 +40,19 @@
     "zod": "^3.25.67"
   },
   "devDependencies": {
-    "@types/imap": "^0.8.42",
     "@eslint/js": "^9.29.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
-    "@semantic-release/github": "^11.0.3",
+    "@semantic-release/github": "^12.0.11",
+    "@semantic-release/npm": "^13.2.0",
+    "@types/imap": "^0.8.42",
     "@types/node": "^24.0.4",
     "eslint": "^9.29.0",
     "eslint-config-prettier": "^10.1.5",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
     "prettier": "3.6.1",
-    "semantic-release": "^24.2.5",
+    "semantic-release": "^25.0.9",
     "shx": "^0.4.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.35.0",
