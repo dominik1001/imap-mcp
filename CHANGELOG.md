@@ -1,3 +1,10 @@
+## [0.1.1](https://github.com/langmail/imap-mcp/compare/v0.1.0...v0.1.1) (2026-11-19)
+
+
+### Bug Fixes
+
+* publish from langmail/imap-mcp and list in the MCP Registry ([#4](https://github.com/langmail/imap-mcp/issues/4)) ([bb4e327](https://github.com/langmail/imap-mcp/commit/bb4e3270f0027b2fd08787bde6bc334839b1b1db))
+
 # 1.0.0 (2025-06-25)
 
 
