@@ -1,0 +1,59 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.langmail/imap-mcp",
+  "description": "IMAP email as MCP tools: create draft messages in the Drafts folder of any IMAP mailbox.",
+  "repository": {
+    "url": "https://github.com/langmail/imap-mcp",
+    "source": "github"
+  },
+  "version": "1.0.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "imap-mcp",
+      "version": "1.0.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "IMAP_HOST",
+          "description": "Hostname of the IMAP server (e.g. imap.example.com)",
+          "isRequired": true,
+          "format": "string",
+          "isSecret": false
+        },
+        {
+          "name": "IMAP_PORT",
+          "description": "Port of the IMAP server",
+          "isRequired": false,
+          "format": "number",
+          "default": "993",
+          "isSecret": false
+        },
+        {
+          "name": "IMAP_USERNAME",
+          "description": "Username for IMAP authentication, also the default From address",
+          "isRequired": true,
+          "format": "string",
+          "isSecret": false
+        },
+        {
+          "name": "IMAP_PASSWORD",
+          "description": "Password for IMAP authentication",
+          "isRequired": true,
+          "format": "string",
+          "isSecret": true
+        },
+        {
+          "name": "IMAP_USE_SSL",
+          "description": "Set to true to connect over TLS",
+          "isRequired": false,
+          "format": "boolean",
+          "default": "false",
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}

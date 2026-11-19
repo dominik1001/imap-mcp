@@ -6,18 +6,18 @@ on:
     branches: [ main ]
 
 permissions:
-  contents: write
-  issues: write
-  pull-requests: write
-  id-token: write
+  contents: write # Create releases and commit version bumps
+  issues: write # Comment on resolved issues
+  pull-requests: write # Comment on merged PRs
+  id-token: write # OIDC token for npm trusted publishing and the MCP Registry
 
 jobs:
   lint-and-format:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '22'
       - name: Install dependencies
@@ -31,8 +31,8 @@ jobs:
     needs: lint-and-format
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
       - run: npm ci
@@ -42,16 +42,64 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    outputs:
+      version: ${{ steps.released.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
       - run: npm ci
       - run: npm run build
+      - name: Record existing release tags
+        run: git tag --list 'v*' | sort > "$RUNNER_TEMP/tags-before"
+      # Publishes to npm through trusted publishing (OIDC), no NPM_TOKEN.
       - run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # The tag semantic-release just created, if any. Comparing against the
+      # tags from before the run keeps re-runs from re-announcing a release.
+      - name: Detect published version
+        id: released
+        run: |
+          tag=$(git tag --list 'v*' | sort | comm -13 "$RUNNER_TEMP/tags-before" - | head -n1)
+          echo "version=${tag#v}" >> "$GITHUB_OUTPUT"
+
+  # Runs here rather than on `release: published`, because the GitHub Release
+  # is created with GITHUB_TOKEN, whose events never start other workflows.
+  mcp-registry:
+    needs: release
+    if: needs.release.outputs.version != ''
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      VERSION: ${{ needs.release.outputs.version }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: v${{ needs.release.outputs.version }}
+      - name: Set version in server.json
+        run: |
+          jq --arg v "$VERSION" '.packages[0].version = $v | .version = $v' server.json > server.tmp && mv server.tmp server.json
+      # The registry checks that the npm version exists, and npm can answer
+      # 404 for a minute or more right after publishing.
+      - name: Wait for the version on npm
+        run: |
+          for _ in $(seq 1 40); do
+            npm view "imap-mcp@$VERSION" version >/dev/null 2>&1 && exit 0
+            echo "Waiting for imap-mcp@$VERSION on npm..."
+            sleep 15
+          done
+          echo "imap-mcp@$VERSION did not appear on npm within 10 minutes" >&2
+          exit 1
+      - name: Install mcp-publisher
+        run: |
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
+      - name: Publish to MCP Registry
+        run: |
+          ./mcp-publisher login github-oidc
+          ./mcp-publisher publish
